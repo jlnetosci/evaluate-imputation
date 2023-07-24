@@ -3,6 +3,10 @@ library(ggplot2)
 library(patchwork)
 # library(gtools)
 # library(qpdf)
+library(showtext)
+fam <- "Lato"
+font_add_google(fam, fam)
+showtext_auto()
 
 py_data_frames <- py_load_object(file = "data_frames.obj")
 
@@ -33,11 +37,26 @@ for (j in 1:10){
 }
 
 to_plot <- data.frame("n_features"=1:10, "mean"=m, "sd"=stdev)
+to_plot$sd[which(to_plot$sd == 0)] <- NA
 
-ggplot(to_plot, aes(x=n_features, y=mean)) +
-  geom_line() +
-  geom_point(data=to_plot, aes(x=n_features, y=mean)) +
-  theme_classic()
+ggplot() +
+  geom_ribbon(data=to_plot, aes(x=n_features, ymin=mean-sd, ymax=mean+sd), fill="#005e9e", alpha=0.25) +
+  #geom_point(data=vt, aes(x=n_features, y=percent), position = position_jitter(seed = 42, width=0.05, height=0.005), alpha=0.05, fill="lightgrey", shape=1) +
+  geom_point(data=to_plot, aes(x=n_features, y=mean), color="#005e9e", size = 3) +
+  geom_line(data=to_plot, aes(x = n_features, y = mean), color = "#005e9e", linewidth = 0.6, linetype = "dotted") +
+  geom_text(data=to_plot, aes(x=n_features, y=mean, label=round(mean, 2)), nudge_y = 0.05, color="#005e9e", size = 5, fontface='bold', family=fam) +
+  scale_x_continuous(n.breaks = 10) +
+  scale_y_continuous(n.breaks = 10, expand = c(0, 0)) +
+  coord_cartesian(ylim = c(0, 1.02)) +
+  ggtitle("Proportion of nearest neighbor vs. number of features",
+          subtitle = "(mean ± standard deviation)") +
+  #subtitle("Proportion of nearest neighbor at maximum\nfeatures vs. increasing number of features") +
+  xlab("") + 
+  ylab("") + 
+  theme_classic() +
+  theme(text = element_text(size = 16, family=fam),
+        plot.title=element_text(face='bold'), 
+        plot.caption=element_text(face='bold'))
 
 
 for (k in seq(1, 1000)) {
