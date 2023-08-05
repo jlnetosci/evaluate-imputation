@@ -11,7 +11,7 @@
 #		specific patterns as arguments.
 # ------------------------------------------------------------------
 
-for var in $(ls experiment*/data_frames.obj); do
+for var in experiment*/data_frames.obj; do
     if [ $(stat -c %s $var) -gt 50000000 ];
 	then
 		7z -v47M a ${var//.obj/.7z} $var
