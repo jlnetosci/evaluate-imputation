@@ -163,3 +163,7 @@ cython_debug/
 .Rproj.user
 *.Rproj
 .Rhistory
+
+# Pickled objects (should be compressed for version control)
+*.obj
+*-pkl
