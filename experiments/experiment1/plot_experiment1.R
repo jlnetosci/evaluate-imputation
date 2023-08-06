@@ -1,6 +1,6 @@
 library(ggplot2)
 
-data <- read.csv("experiment1.csv", row.names = 1)
+data <- read.csv("./experiment1/experiment1.csv", row.names = 1)
 
 nn_freq <- data.frame(table(data$index))
 nn_freq <- nn_freq[order(nn_freq$Freq, decreasing = T),]
